@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+      img {
+        width: 80px;
+        height: 80px;
+      }
+
+    </style>
+    <title>Barbut Game</title>
+    <script type="text/javascript">
+    
+    let myNumber;
+    
+    function start() {
+        let dice = document.getElementById('dice');
+        let roll = document.getElementById('roll');
+        img1 = document.getElementById('dice1');
+        img2 = document.getElementById('dice2');
+
+        roll.disabled = true;
+
+        dice.addEventListener('click',rollDice,false);
+    }
+    function firstRoll(total) {
+        let text = document.getElementById('output');    
+
+         
+        switch(total) {
+        case 7: case 11:
+            text.innerHTML = "Kazandınız (toplamda 7 veya 11 attınız.)";
+            roll.disabled=true;
+            break;
+        case 2: case 3:case 12:
+            text.innerHTML = 'Kaybettiniz(toplamda 2,3,12 attınız.)';
+            break;
+        default:
+            text.innerHTML= "Oyuna devam ediyosunuz";
+            myNumber = total;
+            roll.disabled = false;
+            dice.disabled = true;
+            roll.addEventListener('click',afterRoll,false);
+        }
+    }
+    function afterRoll() {
+        let text = document.getElementById('output');
+        text.innerHTML = " ";
+        let total = myNumber;
+        
+        let face1 = Math.floor(Math.random()*6+1);
+        let face2 = Math.floor(Math.random()*6+1);
+
+        let myNumber2 = face1 + face2;
+        
+        setImage(face1, face2);
+        if(total == myNumber2) {
+            text.innerHTML = 'Önceki el '+myNumber+' ile toplam aynı kazandınız.';
+            dice.disabled= false;
+            roll.disabled = true;
+
+        }else if(myNumber2==7) {
+            text.innerHTML = 'Kaybettiniz toplam 7, önceki el '+myNumber+" attınız";
+            dice.disabled = false;
+            roll.disabled =true;
+        
+        }else {
+            text.innerHTML="Oyuna devam ediyosunuz, Önceki el "+ myNumber+" attınız.";
+            myNumber = myNumber2;
+            
+                      
+        }
+        console.log("En son bir önceki toplam: "+myNumber);
+    }
+    
+    function rollDice() {
+        let face1 = Math.floor(Math.random()*6+1);
+        let face2 = Math.floor(Math.random()*6+1);
+        myNumber = face2 + face1;
+        firstRoll(myNumber);
+
+        setImage(face1,face2);
+
+    }
+
+    function setImage(sayi1,sayi2) {
+    img1.setAttribute('src', './img/'+sayi1+'.png');
+    img2.setAttribute('src', './img/'+sayi2+'.png');
+    }
+
+    window.addEventListener('load',start,false);
+    </script>   
+    
+</head>
+<body>
+    <p><img id="dice1" src="./img/5.png" alt="1.zar">
+        <img id="dice2" src="./img/6.png" alt="2.zar"></p>
+    
+     <form action="#">
+         <input type="button" id= "dice" name="dice" value="Play">
+        <input type="button" name="roll" id="roll" value="Roll">
+     </form>
+     <h1 id="output"></h1><br><br><br><br>
+     <h1>Oyuna  Play diyerek baslayınız.<br>
+     İlk elde zarların toplamı 7,11 kazandınız<br>
+     Zarların toplamı 2,3,12 ise kaybettiniz.Bunlardan başka<br>
+     4,5,6,8,9,10 bunlardan biri ise roll tusuna basıp zar atmaya devam edin.<br>
+     Bir sonraki atışta (bir önceki attıgınız zarı atabilirseniz kazandınız)<br>
+     Ama 7 atarsanız oyun biter.<br>
+     Bir önceki zarın toplamını yakalarsanız oyunu kazanırsınız. <br>
+
+     Play tuşu oyunu başlatmak ve anında zar atmak icin<br>
+    Roll tusu kazınıp kaybetmesseniz zar atmak icin</h1>
+</body>
+</html>
